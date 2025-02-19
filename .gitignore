@@ -1,0 +1,21 @@
+# Ignore macOS system files
+.DS_Store
+
+# Ignore Python cache files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore virtual environments
+venv/
+env/
+
+# Ignore Node.js dependencies
+bmi-react/node_modules/
+
+# Ignore React build files (if building manually)
+bmi-react/dist/
+
+# Ignore logs and temporary files
+*.log

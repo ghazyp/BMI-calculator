@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BMI Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+
+        input {
+            padding: 5px;
+            margin: 5px;
+            width: 80px;
+        }
+
+        button {
+            padding: 8px 12px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+        #result {
+            font-weight: bold;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>BMI Calculator</h1>
+
+    <!-- Height Input (Feet & Inches) -->
+    <label for="feet">Height:</label>
+    <input type="number" id="feet" placeholder="ft">
+    <input type="number" id="inches" placeholder="in"> inches
+
+    <br>
+
+    <!-- OR: Height Input (CM) -->
+    <label for="cm">OR Height (cm):</label>
+    <input type="number" id="cm" placeholder="cm">
+
+    <br>
+
+    <!-- Weight Input (Pounds) -->
+    <label for="pounds">Weight:</label>
+    <input type="number" id="pounds" placeholder="lbs"> lbs
+
+    <br>
+
+    <!-- OR: Weight Input (Kg) -->
+    <label for="kg">OR Weight (kg):</label>
+    <input type="number" id="kg" placeholder="kg">
+
+    <br>
+
+    <button onclick="calculateBMI()">Calculate BMI</button>
+
+    <p id="result"></p>
+
+    <script>
+        async function calculateBMI() {
+            let feet = document.getElementById("feet").value || 0;
+            let inches = document.getElementById("inches").value || 0;
+            let cm = document.getElementById("cm").value || 0;
+            let pounds = document.getElementById("pounds").value || 0;
+            let kg = document.getElementById("kg").value || 0;
+
+            let data = {
+                feet: parseFloat(feet),
+                inches: parseFloat(inches),
+                cm: parseFloat(cm),
+                pounds: parseFloat(pounds),
+                kg: parseFloat(kg)
+            };
+
+            try {
+                let response = await fetch("/calculate", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(data)
+                });
+
+                let result = await response.json();
+
+                if (response.ok) {
+                    document.getElementById("result").innerHTML = `Your BMI is: <b>${result.bmi}</b> <br> Category: <b>${result.category}</b>`;
+                } else {
+                    document.getElementById("result").innerHTML = `<span style="color:red;">Error: ${result.error}</span>`;
+                }
+            } catch (error) {
+                document.getElementById("result").innerHTML = `<span style="color:red;">Network Error. Please try again.</span>`;
+            }
+        }
+    </script>
+
+</body>
+
+</html>
